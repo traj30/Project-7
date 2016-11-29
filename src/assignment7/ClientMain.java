@@ -1,5 +1,5 @@
 /* ClientMain.java
- * EE422C Project 4b submission by
+ * EE422C Project 7 submission by
  * Replace <...> with your actual data.
  * Jake Klovenski
  * jdk2595
