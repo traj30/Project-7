@@ -1,4 +1,4 @@
-/* ServerMain.java
+   /* ServerMain.java
  * EE422C Project 4b submission by
  * Replace <...> with your actual data.
  * Jake Klovenski
@@ -13,9 +13,11 @@
 
 package assignment7;
 
+import java.util.concurrent.atomic.AtomicInteger;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Observable;
@@ -25,17 +27,19 @@ public class ServerMain extends Observable {
 		try {
 			new ServerMain().setUpNetworking();
 		} catch (Exception e) {
+			//System.exit(0);
 			e.printStackTrace();
 		}
 	}
 
 	private void setUpNetworking() throws Exception {
 		@SuppressWarnings("resource")
-		ServerSocket serverSock = new ServerSocket(4244);
+		ServerSocket serverSock = new ServerSocket(4242);
 		while (true) {
 			Socket clientSocket = serverSock.accept();
 			ClientObserver writer = new ClientObserver(clientSocket.getOutputStream());
 			Thread t = new Thread(new ClientHandler(clientSocket));
+
 			t.start();
 			this.addObserver(writer);
 			System.out.println("got a connection");
@@ -54,16 +58,24 @@ public class ServerMain extends Observable {
 		}
 
 		public void run() {
-			String message;
+			String msg;
 			try {
-				while ((message = reader.readLine()) != null) {
-					System.out.println("server read "+message);
+				while ((msg = reader.readLine()) != null) {
 					setChanged();
-					notifyObservers(message);
+					notifyObservers(msg);
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
+	}
+	private static AtomicInteger user = new AtomicInteger(0);
+	public static int getClient() {
+		System.out.println("get" + user);
+		return user.get();
+	}
+	public static void setClient(int client) {
+		user.set(client);
+		System.out.println("set" + client);
 	}
 }
