@@ -23,15 +23,26 @@ import java.net.Socket;
 import java.util.Observable;
 
 public class ServerMain extends Observable {
+	
+	private static AtomicInteger user = new AtomicInteger(0);
+	
 	public static void main(String[] args) {
 		try {
 			new ServerMain().setUpNetworking();
 		} catch (Exception e) {
-			//System.exit(0);
 			e.printStackTrace();
 		}
 	}
 
+	public static int getClient() {
+		//System.out.println("get" + user);
+		return user.get();
+	}
+	public static void setClient(int client) {
+		user.set(client);
+		//System.out.println("set" + client);
+	}
+	
 	private void setUpNetworking() throws Exception {
 		@SuppressWarnings("resource")
 		ServerSocket serverSock = new ServerSocket(4242);
@@ -69,13 +80,5 @@ public class ServerMain extends Observable {
 			}
 		}
 	}
-	private static AtomicInteger user = new AtomicInteger(0);
-	public static int getClient() {
-		System.out.println("get" + user);
-		return user.get();
-	}
-	public static void setClient(int client) {
-		user.set(client);
-		System.out.println("set" + client);
-	}
+
 }
