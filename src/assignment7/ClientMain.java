@@ -63,7 +63,7 @@ public class ClientMain extends Application {
 	}
 
 	public void setUpNetworking() throws Exception {
-		Socket sock = new Socket("127.0.0.1", 4242);
+		Socket sock = new Socket("192.168.2.7", 4242);
 		InputStreamReader streamReader = new InputStreamReader(sock.getInputStream());
 		reader = new BufferedReader(streamReader);
 		writer = new PrintWriter(sock.getOutputStream());
