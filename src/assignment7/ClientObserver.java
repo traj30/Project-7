@@ -24,8 +24,8 @@ public class ClientObserver extends PrintWriter implements Observer {
 	}
 	@Override
 	public void update(Observable o, Object arg) {
-		this.println(arg); //writer.println(arg);
-		this.flush(); //writer.flush();
+		this.println(arg); 
+		this.flush(); 
 	}
 
 }

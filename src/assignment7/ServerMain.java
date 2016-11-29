@@ -35,12 +35,10 @@ public class ServerMain extends Observable {
 	}
 
 	public static int getClient() {
-		//System.out.println("get" + user);
 		return user.get();
 	}
 	public static void setClient(int client) {
 		user.set(client);
-		//System.out.println("set" + client);
 	}
 	
 	private void setUpNetworking() throws Exception {
