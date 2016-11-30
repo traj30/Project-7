@@ -111,6 +111,7 @@ public class ClientMain extends Application {
 		{
 			Stage substage = new Stage();
 			substage.setTitle("Prompt"); 
+			
 			enterIP = new TextField(); 
 			BorderPane IPBPane = new BorderPane(); 
 			IPBPane.setPadding(new Insets(6, 6, 6, 6));  
