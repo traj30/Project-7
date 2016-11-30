@@ -94,7 +94,7 @@ public class ClientMain extends Application {
 				sent = user + " joined.";
 			} 
 			else {
-				sent = user + ":  "+ outgoing.getText();
+				sent = user + ":"+ outgoing.getText();
 			}
 			writer.println(sent);
 			writer.flush();
@@ -163,13 +163,15 @@ public class ClientMain extends Application {
 		public void run() {
 			
 			String msg;
+
 			try {
 				while ((msg = reader.readLine()) != null) {
-					if (msg.charAt(msg.indexOf(':') + 3) == '@') {
+					if (msg.charAt(msg.indexOf(':') + 1) == '@') {
 						synchronized(this) {
-							if (msg.substring(msg.indexOf(':') + 4, msg.indexOf(':') + 4 + user.length()).equals(user)) {
+							String toUser = msg.substring(msg.indexOf(':') + 2,msg.indexOf(' '));
+							if (toUser.equals(user)) {
 								String msgUser = msg.substring(0, msg.indexOf(':'));
-								String sentMsg = msg.substring(msg.indexOf(':') + 4 + msgUser.length(), msg.length());
+								String sentMsg = msg.substring(msg.indexOf(' '), msg.length());
 								incoming.appendText(msgUser + " sent you: " +  sentMsg + "\n");
 							} else if (msg.equals(sent)) {
 								incoming.appendText(msg + "\n");
