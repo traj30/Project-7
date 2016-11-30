@@ -30,6 +30,8 @@ import javafx.stage.Stage;
 import java.awt.event.ActionListener;
 import java.io.*; 
 import java.net.*;
+import java.util.ArrayList;
+import java.util.StringJoiner;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ClientMain extends Application { 
@@ -46,6 +48,7 @@ public class ClientMain extends Application {
 	private TextField outgoing;
 	private BufferedReader reader;
 	private PrintWriter writer;
+	private ArrayList<String> groups = new ArrayList<String>();
 	//run program
 	public static void main(String[] args) {
 		launch(args);
@@ -96,7 +99,7 @@ public class ClientMain extends Application {
 				sent = user + " joined.";
 			} 
 			else {
-				sent = user + ": "+ outgoing.getText();
+				sent = user + ":"+ outgoing.getText();
 			}
 			writer.println(sent);
 			writer.flush();
@@ -168,17 +171,42 @@ public class ClientMain extends Application {
 			String msg;
 			try {
 				while ((msg = reader.readLine()) != null) {
-					if (msg.charAt(msg.indexOf(':') + 3) == '@') {
+					char metaChar = msg.charAt(msg.indexOf(':') + 1);
+					System.out.println(metaChar);
+					if (metaChar == '@') {
 						synchronized(this) {
-							if (msg.substring(msg.indexOf(':') + 4, msg.indexOf(':') + 4 + user.length()).equals(user)) {
+							String toUser = msg.substring(msg.indexOf(':') + 2,msg.indexOf(' '));
+							if (toUser.equals(user)) {
 								String msgUser = msg.substring(0, msg.indexOf(':'));
-								String sentMsg = msg.substring(msg.indexOf(':') + 4 + msgUser.length(), msg.length());
+								String sentMsg = msg.substring(msg.indexOf(' '), msg.length());
 								incoming.appendText(msgUser + " sent you: " +  sentMsg + "\n");
 							} else if (msg.equals(sent)) {
 								incoming.appendText(msg + "\n");
 							}
 						}
-					} else {
+					}
+					else if(metaChar == '#'){
+						synchronized (this) {
+							String group = msg.substring(msg.indexOf(':') + 2, msg.indexOf(' '));
+							if(groups.contains(group))
+							{
+								String msgUser = msg.substring(0, msg.indexOf(':'));
+								String sentMsg = msg.substring(msg.indexOf(' '),msg.length());
+								incoming.appendText((msgUser + " said to " + group + ": " + sentMsg + "\n"));
+							}
+						}
+					}
+					else if(metaChar == '$'){
+						synchronized (this) {
+							String group = msg.substring(msg.indexOf(':') + 2);
+							System.out.println(group);
+							if(!groups.contains(group)){
+								System.out.println("group");
+								groups.add(group);
+							}
+						}
+					}
+					else {
 						synchronized(this){
 							incoming.appendText(msg + "\n");
 						}
@@ -190,6 +218,4 @@ public class ClientMain extends Application {
 			}
 		}
 	}
-	
-	
 }

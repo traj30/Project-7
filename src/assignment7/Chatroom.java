@@ -1,5 +1,7 @@
 package assignment7;
 
+import com.sun.security.ntlm.Client;
+
 import java.util.ArrayList;
 
 /**
@@ -7,12 +9,13 @@ import java.util.ArrayList;
  */
 
 public class Chatroom extends Thread{
-    String name;
-    ArrayList<Client> clients;
+    private String name;
+    private ArrayList<Client> clients;
 
     public Chatroom() {
         name = "";
     }
+
     public Chatroom(String name) {
         this.name = name;
         clients = new ArrayList<Client>();
