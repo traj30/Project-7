@@ -30,6 +30,8 @@ import javafx.stage.Stage;
 import java.awt.event.ActionListener;
 import java.io.*; 
 import java.net.*;
+import java.util.ArrayList;
+import java.util.StringJoiner;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ClientMain extends Application { 
@@ -45,6 +47,7 @@ public class ClientMain extends Application {
 	private TextField outgoing;
 	private BufferedReader reader;
 	private PrintWriter writer;
+	private ArrayList<String> groups = new ArrayList<String>();
 	//run program
 	public static void main(String[] args) {
 		launch(args);
@@ -163,10 +166,11 @@ public class ClientMain extends Application {
 		public void run() {
 			
 			String msg;
-
 			try {
 				while ((msg = reader.readLine()) != null) {
-					if (msg.charAt(msg.indexOf(':') + 1) == '@') {
+					char metaChar = msg.charAt(msg.indexOf(':') + 1);
+					System.out.println(metaChar);
+					if (metaChar == '@') {
 						synchronized(this) {
 							String toUser = msg.substring(msg.indexOf(':') + 2,msg.indexOf(' '));
 							if (toUser.equals(user)) {
@@ -177,7 +181,29 @@ public class ClientMain extends Application {
 								incoming.appendText(msg + "\n");
 							}
 						}
-					} else {
+					}
+					else if(metaChar == '#'){
+						synchronized (this) {
+							String group = msg.substring(msg.indexOf(':') + 2, msg.indexOf(' '));
+							if(groups.contains(group))
+							{
+								String msgUser = msg.substring(0, msg.indexOf(':'));
+								String sentMsg = msg.substring(msg.indexOf(' '),msg.length());
+								incoming.appendText((msgUser + " said to " + group + ": " + sentMsg + "\n"));
+							}
+						}
+					}
+					else if(metaChar == '$'){
+						synchronized (this) {
+							String group = msg.substring(msg.indexOf(':') + 2);
+							System.out.println(group);
+							if(!groups.contains(group)){
+								System.out.println("group");
+								groups.add(group);
+							}
+						}
+					}
+					else {
 						synchronized(this){
 							incoming.appendText(msg + "\n");
 						}
@@ -189,6 +215,4 @@ public class ClientMain extends Application {
 			}
 		}
 	}
-	
-	
 }
