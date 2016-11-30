@@ -35,11 +35,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class ClientMain extends Application { 
 	//initialize variables
 	private AtomicBoolean initial = new AtomicBoolean(true);
+	private AtomicBoolean flag = new AtomicBoolean(true);
 	private String user = "";
 	private String sent = "";
-	private String ip = "";
+	private String ip;
 	private Label ipLabel;
-	private Button sendIP;
+	//private Button sendIP;
 	private TextField enterIP;
 	private TextArea incoming;
 	private TextField outgoing;
@@ -78,11 +79,12 @@ public class ClientMain extends Application {
 	 * @throws Exception
 	 */
 	public void setUpNetworking() throws Exception {
-		Socket sock = new Socket(ip, 4242);			//"192.168.2.7"
+		Socket sock = new Socket(ip, 4300);			//"192.168.2.7"
 		InputStreamReader streamReader = new InputStreamReader(sock.getInputStream());
 		reader = new BufferedReader(streamReader);
 		writer = new PrintWriter(sock.getOutputStream());
 		System.out.println("networking established");
+		System.out.println(ip);
 	}
 	/**
 	 * when enter is pressed on textfield, output text to text area, then reset writer and textfield
@@ -94,7 +96,7 @@ public class ClientMain extends Application {
 				sent = user + " joined.";
 			} 
 			else {
-				sent = user + ":  "+ outgoing.getText();
+				sent = user + ": "+ outgoing.getText();
 			}
 			writer.println(sent);
 			writer.flush();
@@ -111,23 +113,22 @@ public class ClientMain extends Application {
 		{
 			Stage substage = new Stage();
 			substage.setTitle("Prompt"); 
-			
 			enterIP = new TextField(); 
 			BorderPane IPBPane = new BorderPane(); 
 			IPBPane.setPadding(new Insets(6, 6, 6, 6));  
-			enterIP.setAlignment(Pos.TOP_LEFT);
+			enterIP.setAlignment(Pos.BASELINE_LEFT);
 			IPBPane.setCenter(enterIP); 
 			ipLabel = new Label("Enter IP Address: ");
 			IPBPane.setLeft(ipLabel);
 			Scene scene = new Scene(IPBPane, 350, 150); 
 			substage.setScene(scene); 
 			substage.show();
-			while(enterIP.isPressed()){}
 			//set ip to IP address once enter is pressed on text field
 		    enterIP.setOnAction(new EventHandler<ActionEvent>() {
 		        @Override
 		        public void handle(ActionEvent t) {
 		        	ip = enterIP.getText();
+		        	flag.set(false);
 		        	substage.close();
 		        }
 		    });
@@ -141,8 +142,10 @@ public class ClientMain extends Application {
 	 */
 	@Override  
 	public void start(Stage stage) throws Exception { 
+				
 		
 		FirstStage ipStage = new FirstStage();
+		while(flag.get() == true){}
 		setUpNetworking();
 		Scene scene = initView(); 
 		
