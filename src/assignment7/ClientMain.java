@@ -32,6 +32,7 @@ import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.StringJoiner;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ClientMain extends Application { 
@@ -110,7 +111,7 @@ public class ClientMain extends Application {
 	 */
 	class FirstStage {
 				
-		FirstStage() 
+		FirstStage(Stage stage)
 		{
 			Stage substage = new Stage();
 			substage.setTitle("Prompt"); 
@@ -131,6 +132,13 @@ public class ClientMain extends Application {
 		        @Override
 		        public void handle(ActionEvent t) {
 		        	ip = enterIP.getText();
+					try {
+						mainStage(stage);
+					}
+					catch(Exception e)
+					{
+						System.out.println(e);
+					}
 		        	substage.close();
 		        }
 		    });
@@ -145,18 +153,23 @@ public class ClientMain extends Application {
 	@Override  
 	public void start(Stage stage) throws Exception { 
 		
-		FirstStage ipStage = new FirstStage();
+		FirstStage ipStage = new FirstStage(stage);
+
+	}
+
+	public void mainStage(Stage stage) throws Exception
+	{
 		setUpNetworking();
-		Scene scene = initView(); 
-		
-		stage.setTitle("Chat Room");  
-		stage.setScene(scene); 
+		Scene scene = initView();
+
+		stage.setTitle("Chat Room");
+		stage.setScene(scene);
 		stage.show();
-		
+
 		Thread reading = new Thread(new IncomingReader());
 		reading.start();
-		
-		actionPerformed();					
+
+		actionPerformed();
 	}
 	/**
 	 * threaded input analyzer of text field
