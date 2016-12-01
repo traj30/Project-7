@@ -110,7 +110,7 @@ public class ClientMain extends Application {
 	 */
 	class FirstStage {
 				
-		FirstStage(Stage stage)
+		FirstStage() 
 		{
 			Stage substage = new Stage();
 			substage.setTitle("Prompt"); 
@@ -131,7 +131,6 @@ public class ClientMain extends Application {
 		        @Override
 		        public void handle(ActionEvent t) {
 		        	ip = enterIP.getText();
-					MainStage main = new MainStage(stage);
 		        	substage.close();
 		        }
 		    });
@@ -146,40 +145,18 @@ public class ClientMain extends Application {
 	@Override  
 	public void start(Stage stage) throws Exception { 
 		
-		FirstStage ipStage = new FirstStage(stage);
-/*		setUpNetworking();
-		scene scene = initview();
-
-		stage.settitle("chat room");
-		stage.setscene(scene);
+		FirstStage ipStage = new FirstStage();
+		setUpNetworking();
+		Scene scene = initView(); 
+		
+		stage.setTitle("Chat Room");  
+		stage.setScene(scene); 
 		stage.show();
-
-		thread reading = new thread(new incomingreader());
+		
+		Thread reading = new Thread(new IncomingReader());
 		reading.start();
-
-		actionperformed();
-						*/
-	}
-
-	class MainStage {
-		MainStage(Stage stage){
-			try {
-				setUpNetworking();
-				Scene scene = initView();
-
-				stage.setTitle("chat room");
-				stage.setScene(scene);
-				stage.show();
-
-				Thread reading = new Thread(new IncomingReader());
-				reading.start();
-
-				actionPerformed();
-			}
-			catch(Exception e) {
-				System.out.println(e);
-			}
-		}
+		
+		actionPerformed();					
 	}
 	/**
 	 * threaded input analyzer of text field
