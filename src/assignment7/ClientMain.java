@@ -193,7 +193,7 @@ public class ClientMain extends Application {
 			try {
 				while ((msg = reader.readLine()) != null) {
 					char metaChar = msg.charAt(msg.indexOf(':') + 1);
-					System.out.println(metaChar);
+					//System.out.println(metaChar);
 					if (metaChar == '@') {
 						synchronized(this) {
 
@@ -234,9 +234,9 @@ public class ClientMain extends Application {
 					else if(metaChar == '$'){
 						synchronized (this) {
 							String group = msg.substring(msg.indexOf(':') + 2);
-							System.out.println(group);
+							//System.out.println(group);
 							if(!groups.contains(group) && msg.substring(0,msg.indexOf(':')).equals(user)){
-								System.out.println("group");
+								//System.out.println("group");
 								groups.add(group);
 								groupnames.appendText(group);
 							}
