@@ -42,8 +42,10 @@ public class ClientMain extends Application {
 	private String sent = "";
 	private String ip = "";
 	private Label ipLabel;
+	private Label guiL;
 	private Button sendIP;
 	private TextField enterIP;
+	private TextArea groupnames;
 	private TextArea incoming;
 	private TextField outgoing;
 	private BufferedReader reader;
@@ -61,6 +63,7 @@ public class ClientMain extends Application {
 		//create layouts
 		incoming = new TextArea("Please enter a username below \n"); 
 		outgoing = new TextField(); 
+		groupnames = new TextArea("Your Groups:\n");
 		outgoing.setAlignment(Pos.BASELINE_LEFT); 
 		//create borderpane for outgoing text
 		BorderPane outgoingBPane = new BorderPane(); 
@@ -70,10 +73,18 @@ public class ClientMain extends Application {
 		//create main border pane
 		BorderPane mainBPane = new BorderPane(); 
 		mainBPane.setCenter(incoming); 
+		guiL = new Label("Use '@username message' to send a private message to a user\n\nUse '#groupname message' "
+				+ "to send a private message to a group\n\nUse '$groupname' to add yourself to "
+				+ "a group or make a new group with that name\n\nGroup names are confidential, please request other user for name");
+		mainBPane.setRight(guiL);
+		mainBPane.setLeft(groupnames); 
 		mainBPane.setBottom(outgoingBPane); 
 		//create scene
-		Scene scene = new Scene(mainBPane, 500, 200); 
-		incoming.resize(scene.getWidth(), scene.getHeight());
+		Scene scene = new Scene(mainBPane, 1200, 250); 
+		//incoming.resize(scene.getWidth(), scene.getHeight());
+		incoming.setMinWidth(500.0);
+		groupnames.setMaxWidth(200.0);
+		guiL.setMinWidth(450.0);
 		return scene;
 	}
 	/**
@@ -185,15 +196,7 @@ public class ClientMain extends Application {
 					System.out.println(metaChar);
 					if (metaChar == '@') {
 						synchronized(this) {
-<<<<<<< HEAD
-							String toUser = msg.substring(msg.indexOf(':') + 2,msg.indexOf(' '));
-							if (toUser.equals(user)) {
-								String msgUser = msg.substring(0, msg.indexOf(':'));
-								String sentMsg = msg.substring(msg.indexOf(' '), msg.length());
-								incoming.appendText(msgUser + " sent you: " +  sentMsg + "\n");
-							} else if (msg.equals(sent)) {
-								incoming.appendText(msg + "\n");
-=======
+
 							try {
 								String toUser = msg.substring(msg.indexOf(':') + 2, msg.indexOf(' '));
 								if (toUser.equals(user)) {
@@ -207,20 +210,13 @@ public class ClientMain extends Application {
 							catch(ArrayIndexOutOfBoundsException e1)
 							{
 								System.out.println("Please send a message");
->>>>>>> 72eb7f41167400876fa2d7c874d6765b7328adac
+
 							}
 						}
 					}
 					else if(metaChar == '#'){
 						synchronized (this) {
-<<<<<<< HEAD
-							String group = msg.substring(msg.indexOf(':') + 2, msg.indexOf(' '));
-							if(groups.contains(group))
-							{
-								String msgUser = msg.substring(0, msg.indexOf(':'));
-								String sentMsg = msg.substring(msg.indexOf(' '),msg.length());
-								incoming.appendText((msgUser + " said to " + group + ": " + sentMsg + "\n"));
-=======
+
 							try {
 								String group = msg.substring(msg.indexOf(':') + 2, msg.indexOf(' '));
 								if (groups.contains(group)) {
@@ -232,7 +228,6 @@ public class ClientMain extends Application {
 							catch(ArrayIndexOutOfBoundsException e1)
 							{
 								System.out.println("Please send a message.");
->>>>>>> 72eb7f41167400876fa2d7c874d6765b7328adac
 							}
 						}
 					}
@@ -243,6 +238,7 @@ public class ClientMain extends Application {
 							if(!groups.contains(group) && msg.substring(0,msg.indexOf(':')).equals(user)){
 								System.out.println("group");
 								groups.add(group);
+								groupnames.appendText(group);
 							}
 						}
 					}
