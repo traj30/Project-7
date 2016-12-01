@@ -185,6 +185,7 @@ public class ClientMain extends Application {
 					System.out.println(metaChar);
 					if (metaChar == '@') {
 						synchronized(this) {
+<<<<<<< HEAD
 							String toUser = msg.substring(msg.indexOf(':') + 2,msg.indexOf(' '));
 							if (toUser.equals(user)) {
 								String msgUser = msg.substring(0, msg.indexOf(':'));
@@ -192,17 +193,46 @@ public class ClientMain extends Application {
 								incoming.appendText(msgUser + " sent you: " +  sentMsg + "\n");
 							} else if (msg.equals(sent)) {
 								incoming.appendText(msg + "\n");
+=======
+							try {
+								String toUser = msg.substring(msg.indexOf(':') + 2, msg.indexOf(' '));
+								if (toUser.equals(user)) {
+									String msgUser = msg.substring(0, msg.indexOf(':'));
+									String sentMsg = msg.substring(msg.indexOf(' '), msg.length());
+									incoming.appendText(msgUser + " sent you: " + sentMsg + "\n");
+								} else if (msg.equals(sent)) {
+									incoming.appendText(msg + "\n");
+								}
+							}
+							catch(ArrayIndexOutOfBoundsException e1)
+							{
+								System.out.println("Please send a message");
+>>>>>>> 72eb7f41167400876fa2d7c874d6765b7328adac
 							}
 						}
 					}
 					else if(metaChar == '#'){
 						synchronized (this) {
+<<<<<<< HEAD
 							String group = msg.substring(msg.indexOf(':') + 2, msg.indexOf(' '));
 							if(groups.contains(group))
 							{
 								String msgUser = msg.substring(0, msg.indexOf(':'));
 								String sentMsg = msg.substring(msg.indexOf(' '),msg.length());
 								incoming.appendText((msgUser + " said to " + group + ": " + sentMsg + "\n"));
+=======
+							try {
+								String group = msg.substring(msg.indexOf(':') + 2, msg.indexOf(' '));
+								if (groups.contains(group)) {
+									String msgUser = msg.substring(0, msg.indexOf(':'));
+									String sentMsg = msg.substring(msg.indexOf(' '), msg.length());
+									incoming.appendText((msgUser + " said to " + group + ": " + sentMsg + "\n"));
+								}
+							}
+							catch(ArrayIndexOutOfBoundsException e1)
+							{
+								System.out.println("Please send a message.");
+>>>>>>> 72eb7f41167400876fa2d7c874d6765b7328adac
 							}
 						}
 					}
