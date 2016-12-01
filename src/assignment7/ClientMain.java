@@ -240,7 +240,7 @@ public class ClientMain extends Application {
 						synchronized (this) {
 							String group = msg.substring(msg.indexOf(':') + 2);
 							System.out.println(group);
-							if(!groups.contains(group)){
+							if(!groups.contains(group) && msg.substring(0,msg.indexOf(':')).equals(user)){
 								System.out.println("group");
 								groups.add(group);
 							}
